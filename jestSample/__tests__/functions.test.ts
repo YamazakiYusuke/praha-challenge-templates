@@ -10,8 +10,8 @@ test('sum of [1, 2, 3, 4] to equal 10', () => {
     expect(sumOfArray([1, 2, 3, 4])).toBe(10);
 });
 // []を渡した場合
-test('sum of [] to throw exception', () => {
-    expect(() => sumOfArray([])).toThrow('Reduce of empty array with no initial value');
+test('sum of [] to equal 0', () => {
+    expect(sumOfArray([])).toBe(0);
 });
 // StringのArrayを渡した場合
 // test('sum of [] to throw exception', () => {
@@ -27,8 +27,9 @@ test('async sum of [1, 2, 3, 4] to equal 10', async () => {
     expect(data).toBe(10);
 });
 // []を渡した場合
-test('async sum of [] to throw exception', async () => {
-    expect(asyncSumOfArray([])).rejects.toThrow('Reduce of empty array with no initial value');
+test('async sum of [] to equal 0', async () => {
+    const data = await asyncSumOfArray([]);
+    expect(data).toBe(0);
 });
 
 /**
