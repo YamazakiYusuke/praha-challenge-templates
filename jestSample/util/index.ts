@@ -2,19 +2,30 @@ const getRandomInt = (max: number): number => {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
-export interface BaseDatabase {
+export interface IDatabase {
   save(numbers: number[]): void;
 }
 
-export class Database implements BaseDatabase {
+export class Database implements IDatabase {
   public save(_: number[]): void {
-    // DB保存処理を実装
+    // memo: 課題のために、あえて時々saveが失敗するようにしている
+    if (getRandomInt(10) < 2) {
+      throw new Error("fail!");
+    }
   }
 }
-
-export class DatabaseMock implements BaseDatabase {
-  public saveCallback!: () => void;
+/**
+ * Databaseの成功パターンMock
+ */
+export class SuccessfulDatabaseMock implements IDatabase {
   public save(_: number[]): void {
-    this.saveCallback();
+  }
+}
+/**
+ * Databaseの失敗パターンMock
+ */
+export class FailedDatabaseMock implements IDatabase {
+  public save(_: number[]): void {
+    throw new Error("fail!");
   }
 }
