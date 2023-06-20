@@ -1,21 +1,35 @@
-import { NameApiServiceTest } from "../api/nameApiServiceTest";
+import { ApiNameFetcherMock } from "../api/apiNameFetcher";
 import { asyncSumOfArray, asyncSumOfArraySometimesZero, getFirstNameThrowIfLong, sumOfArray } from "../functions";
-import { DatabaseMock } from "../util";
+import { NameApiService } from "../service/nameApiService";
+import { FailedDatabaseMock, SuccessfulDatabaseMock } from "../util";
 
 /**
  * sumOfArray
  */
 // intのArrayを渡した場合
 test('sum of [1, 2, 3, 4] to equal 10', () => {
-    expect(sumOfArray([1, 2, 3, 4])).toBe(10);
+    // Arrange
+    const array: number[] = [1, 2, 3, 4]
+    // Act
+    const result = sumOfArray(array)
+    // Assert
+    expect(result).toBe(10);
 });
 // []を渡した場合
 test('sum of [] to equal 0', () => {
-    expect(sumOfArray([])).toBe(0);
+    // Arrange
+    const array: number[] = []
+    // Act
+    const data = sumOfArray(array)
+    // Assert
+    expect(data).toBe(0);
 });
 // StringのArrayを渡した場合
 // test('sum of [] to throw exception', () => {
-//     expect(() => sumOfArray(['A', 'B'])).toThrow();
+//     // Arrange
+//     const array: String[] = ['A', 'B']
+//     // Act, Assert
+//     expect(() => sumOfArray([array])).toThrow();
 // });
 
 /**
@@ -23,12 +37,20 @@ test('sum of [] to equal 0', () => {
  */
 // intのArrayを渡した場合
 test('async sum of [1, 2, 3, 4] to equal 10', async () => {
-    const data = await asyncSumOfArray([1, 2, 3, 4]);
+    // Arrange
+    const array: number[] = [1, 2, 3, 4]
+    // Act
+    const data = await asyncSumOfArray(array);
+    // Assert
     expect(data).toBe(10);
 });
 // []を渡した場合
-test('async sum of [] to equal 0', async () => {
-    const data = await asyncSumOfArray([]);
+test('async sum of [] to throw exception', async () => {
+    // Arrange
+    const array: number[] = []
+    // Act
+    const data = await asyncSumOfArray(array)
+    // Assert
     expect(data).toBe(0);
 });
 
@@ -37,42 +59,42 @@ test('async sum of [] to equal 0', async () => {
  */
 // intのArrayを渡した場合 && Database保存成功
 test('async sum of same times zero of [1, 2, 3, 4] and data save success to equal 10', async () => {
+    // Arrange
     const array = [1, 2, 3, 4];
-    const database = new DatabaseMock();
-    database.saveCallback = () => {
-        console.log('data save success');
-    };
+    const database = new SuccessfulDatabaseMock();
+    // Act
     const data = await asyncSumOfArraySometimesZero(array, database);
+    // Assert
     expect(data).toBe(10);
 });
 // []を渡した場合 && Database保存成功
 test('async sum of same times zero of [] and data save success to be 0', async () => {
+    // Arrange
     const array: number[] = [];
-    const database = new DatabaseMock();
-    database.saveCallback = () => {
-        console.log('data save success');
-    };
-    expect(asyncSumOfArraySometimesZero(array, database)).resolves.toBe(0);
+    const database = new SuccessfulDatabaseMock();
+    // Act
+    const data = await asyncSumOfArraySometimesZero(array, database);
+    // Assert
+    expect(data).toBe(0);
 });
 // intのArrayを渡した場合 && Database保存失敗
 test('async sum of same times zero of [1, 2, 3, 4] and data save failed to equal 0', async () => {
+    // Arrange
     const array = [1, 2, 3, 4];
-    const database = new DatabaseMock();
-    database.saveCallback = () => {
-        console.log('data save failed');
-        throw new Error();
-    };
-    expect(asyncSumOfArraySometimesZero(array, database)).resolves.toBe(0);
+    const database = new FailedDatabaseMock();
+    // Act
+    const data = await asyncSumOfArraySometimesZero(array, database);
+    // Assert
+    expect(data).toBe(0);
 });
 // []を渡した場合 && Database保存失敗
 test('async sum of same times zero of [] and data save failed to be 0', async () => {
     const array: number[] = [];
-    const database = new DatabaseMock();
-    database.saveCallback = () => {
-        console.log('data save failed');
-        throw new Error();
-    };
-    expect(asyncSumOfArraySometimesZero(array, database)).resolves.toBe(0);
+    const database = new FailedDatabaseMock();
+    // Act
+    const data = await asyncSumOfArraySometimesZero(array, database);
+    // Assert
+    expect(data).toBe(0);
 });
 
 /**
@@ -80,23 +102,33 @@ test('async sum of same times zero of [] and data save failed to be 0', async ()
  */
 // maxNameLengthが4文字 && firstNameが4文字の場合
 test('async sum of same times zero of [1, 2, 3, 4] and data save success to equal 10', async () => {
-    const maxNameLength = 4;
+    // Arrange
     const firstName = 'abcd';
-    const nameApiServiceTest = new NameApiServiceTest(firstName);
-    const data = await getFirstNameThrowIfLong(maxNameLength, nameApiServiceTest);
+    const apiNameFetcher = new ApiNameFetcherMock(firstName);
+    const nameApiService = new NameApiService(apiNameFetcher);
+    const maxNameLength = 4;
+    // Act
+    const data = await getFirstNameThrowIfLong(maxNameLength, nameApiService);
+    // Assert
     expect(data).toBe(firstName);
 });
 // maxNameLengthが5文字 && firstNameが5文字の場合
 test('async sum of [] to throw exception', async () => {
-    const maxNameLength = 5;
+    // Arrange
     const firstName = 'abcde';
-    const nameApiServiceTest = new NameApiServiceTest(firstName);
-    expect(getFirstNameThrowIfLong(maxNameLength, nameApiServiceTest)).rejects.toThrow('firstName is too long!');
+    const apiNameFetcher = new ApiNameFetcherMock(firstName);
+    const nameApiService = new NameApiService(apiNameFetcher);
+    const maxNameLength = 5;
+    // Act, Assert
+    expect(getFirstNameThrowIfLong(maxNameLength, nameApiService)).rejects.toThrow('firstName is too long!');
 });
 // maxNameLengthが2文字 && firstNameが3文字の場合
 test('async sum of [] to throw exception', async () => {
-    const maxNameLength = 2;
+    // Arrange
     const firstName = 'abc';
-    const nameApiServiceTest = new NameApiServiceTest(firstName);
-    expect(getFirstNameThrowIfLong(maxNameLength, nameApiServiceTest)).rejects.toThrow('first_name too long');
+    const apiNameFetcher = new ApiNameFetcherMock(firstName);
+    const nameApiService = new NameApiService(apiNameFetcher);
+    const maxNameLength = 2;
+    // Act, Assert
+    expect(getFirstNameThrowIfLong(maxNameLength, nameApiService)).rejects.toThrow('first_name too long');
 });

@@ -1,5 +1,5 @@
-import { NameApiBase } from "./api/nameApiBase";
-import { BaseDatabase } from "./util";
+import { NameApiService } from "./service/nameApiService";
+import { IDatabase } from "./util";
 
 export const sumOfArray = (numbers: number[]): number => {
   if (numbers.length == 0) {
@@ -17,7 +17,7 @@ export const asyncSumOfArray = (numbers: number[]): Promise<number> => {
 
 export const asyncSumOfArraySometimesZero = (
   numbers: number[],
-  database: BaseDatabase
+  database: IDatabase
 ): Promise<number> => {
   return new Promise((resolve): void => {
     try {
@@ -31,7 +31,7 @@ export const asyncSumOfArraySometimesZero = (
 
 export const getFirstNameThrowIfLong = async (
   maxNameLength: number,
-  nameApiService: NameApiBase
+  nameApiService: NameApiService
 ): Promise<string> => {
   const firstName = await nameApiService.getFirstName();
 
