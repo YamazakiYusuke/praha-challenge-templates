@@ -67,7 +67,7 @@ test('async sum of same times zero of [1, 2, 3, 4] and data save success to equa
 test('async sum of same times zero of [] and data save success to be 0', async () => {
     // Arrange
     const array: number[] = [];
-    const database = new FailedDatabaseMock();
+    const database = new SuccessfulDatabaseMock();
     // Act
     const data = await asyncSumOfArraySometimesZero(array, database);
     // Assert
