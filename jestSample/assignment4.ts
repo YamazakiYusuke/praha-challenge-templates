@@ -74,12 +74,12 @@ export const getBeerNameExceptIPA = async (
  * ```
  *
  * @param {string} text - 単語に分割する英文。
- * @param {number} [delay=500] - コールバック関数を呼び出す間隔（ミリ秒）。デフォルトは500ミリ秒。
  * @param {(word: string) => void} callback - 分割した各単語を引数に取るコールバック関数。
+ * @param {number} [delay=500] - コールバック関数を呼び出す間隔（ミリ秒）。デフォルトは500ミリ秒。
  * @returns {Promise<void>}
  * @async
  */
-async function splitAndInvoke(text: string, delay: number = 500, callback: (word: string) => void): Promise<void> {
+export async function splitAndInvoke(text: string, callback: (word: string) => void, delay: number = 500): Promise<void> {
     const words = text.split(' ');
 
     for (const word of words) {
