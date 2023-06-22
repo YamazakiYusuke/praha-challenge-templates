@@ -42,11 +42,13 @@ describe('asyncSumOfArray', () => {
         expect(data).toBe(10);
     });
     // []を渡した場合
-    test('async sum of [] to throw exception', async () => {
+    test('async sum of [] to equal 0', async () => {
         // Arrange
         const array: number[] = []
-        // Act, Assert
-        expect(asyncSumOfArray(array)).rejects.toThrow('Reduce of empty array with no initial value');
+        // Act
+        const data = await asyncSumOfArray(array);
+        // Assert
+        expect(data).toBe(0);
     });
 });
 
