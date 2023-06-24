@@ -20,18 +20,18 @@ import { ApiBeerFetcher } from "./api/apiBeerFetcher";
  * @returns {number} 計算された年齢。
  */
 export function calculateAge(birthday: Date): number {
-    const now = new Date();
-    let age = now.getFullYear() - birthday.getFullYear();
-    let currentMonth = now.getMonth();
-    let birthdayMonth = birthday.getMonth();
-    if (currentMonth < birthdayMonth) {
-        age--;
-    } else if (currentMonth == birthdayMonth) {
-        if (now.getDate() < birthday.getDate()) {
-            age--;
-        }
+  const now = new Date();
+  let age = now.getFullYear() - birthday.getFullYear();
+  let currentMonth = now.getMonth();
+  let birthdayMonth = birthday.getMonth();
+  if (currentMonth < birthdayMonth) {
+    age--;
+  } else if (currentMonth == birthdayMonth) {
+    if (now.getDate() < birthday.getDate()) {
+      age--;
     }
-    return age;
+  }
+  return age;
 }
 
 /**
@@ -52,12 +52,12 @@ export function calculateAge(birthday: Date): number {
  */
 export const getBeerNameExceptIPA = async (
 ): Promise<string> => {
-    const api = new ApiBeerFetcher();
-    const beer = await api.fetch();
-    if (beer.includes('IPA')) {
-        return '';
-    }
-    return beer;
+  const api = new ApiBeerFetcher();
+  const beer = await api.fetch();
+  if (beer.includes('IPA')) {
+    return '';
+  }
+  return beer;
 };
 
 /**
@@ -80,10 +80,10 @@ export const getBeerNameExceptIPA = async (
  * @async
  */
 export async function splitAndInvoke(text: string, callback: (word: string) => void, delay: number = 500): Promise<void> {
-    const words = text.split(' ');
+  const words = text.split(' ');
 
-    for (const word of words) {
-        callback(word);
-        await new Promise(resolve => setTimeout(resolve, delay));
-    }
+  for (const word of words) {
+    callback(word);
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
 }
