@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 export interface IApiBeerFetcher {
-    fetch(): Promise<string>;
+  fetch(): Promise<string>;
 }
 
 /**
@@ -24,33 +24,33 @@ export interface IApiBeerFetcher {
  */
 export class ApiBeerFetcher implements IApiBeerFetcher {
 
-    /**
-     * ランダムなビールデータを非同期に取得します。
-     * レスポンス中のビール名を文字列として返します。
-     * リクエストがタイムアウトした場合やデータ取得に失敗した場合は、適切なエラーメッセージを返します。
-     * 
-     * @returns {Promise<string>} フェッチしたビールデータの名前またはエラーメッセージ。
-     * @throws {AxiosError} リクエストのエラー情報。
-     * @async
-     * @public
-     */
-    public async fetch(): Promise<string> {
-        try {
-            const randomInt = Math.floor(Math.random() * 2000) + 1;
-            const { data } = await axios.get(
-                "https://random-data-api.com/api/v2/beers", { timeout: randomInt }
-            );
-            console.log(data);
-            return data.name as string;
-        } catch (error) {
-            console.error(error);
-            if ((error as AxiosError).message.includes('timeout')) {
-                return 'ApiBeerFetcher request timed out';
-            } else {
-                return 'ApiBeerFetcher failed to fetch data';
-            }
-        }
+  /**
+   * ランダムなビールデータを非同期に取得します。
+   * レスポンス中のビール名を文字列として返します。
+   * リクエストがタイムアウトした場合やデータ取得に失敗した場合は、適切なエラーメッセージを返します。
+   * 
+   * @returns {Promise<string>} フェッチしたビールデータの名前またはエラーメッセージ。
+   * @throws {AxiosError} リクエストのエラー情報。
+   * @async
+   * @public
+   */
+  public async fetch(): Promise<string> {
+    try {
+      const randomInt = Math.floor(Math.random() * 2000) + 1;
+      const { data } = await axios.get(
+        "https://random-data-api.com/api/v2/beers", { timeout: randomInt }
+      );
+      console.log(data);
+      return data.name as string;
+    } catch (error) {
+      console.error(error);
+      if ((error as AxiosError).message.includes('timeout')) {
+        return 'ApiBeerFetcher request timed out';
+      } else {
+        return 'ApiBeerFetcher failed to fetch data';
+      }
     }
+  }
 }
 
 export class SuccessfulApiBeerFetcherMock implements IApiBeerFetcher {
