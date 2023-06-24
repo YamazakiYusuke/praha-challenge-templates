@@ -24,10 +24,10 @@ describe('sumOfArray', () => {
   });
   // StringのArrayを渡した場合
   // test('sum of [] to throw exception', () => {
-  //     // Arrange
-  //     const array: String[] = ['A', 'B']
-  //     // Act, Assert
-  //     expect(() => sumOfArray([array])).toThrow();
+  //   // Arrange
+  //   const array: String[] = ['A', 'B']
+  //   // Act, Assert
+  //   expect(() => sumOfArray([array])).toThrow();
   // });
 });
 
