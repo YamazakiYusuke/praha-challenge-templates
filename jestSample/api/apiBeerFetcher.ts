@@ -52,3 +52,27 @@ export class ApiBeerFetcher implements IApiBeerFetcher {
         }
     }
 }
+
+export class SuccessfulApiBeerFetcherMock implements IApiBeerFetcher {
+  private beerName: string;
+
+  public constructor(beerName: string) {
+    this.beerName = beerName;
+  }
+
+  public async fetch(): Promise<string> {
+    return this.beerName;
+  }
+}
+
+export class TimedOutApiBeerFetcherMock implements IApiBeerFetcher {
+  public async fetch(): Promise<string> {
+    return 'ApiBeerFetcher request timed out';
+  }
+}
+
+export class FailedApiBeerFetcherMock implements IApiBeerFetcher {
+  public async fetch(): Promise<string> {
+    return 'ApiBeerFetcher failed to fetch data';
+  }
+}
