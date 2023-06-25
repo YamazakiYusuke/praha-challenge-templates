@@ -2,6 +2,10 @@ import { NameApiService } from "./service/nameApiService";
 import { IDatabase } from "./util";
 
 export const sumOfArray = (numbers: number[]): number => {
+  if (numbers.length == 0) {
+    console.log("Argument array is empty!");
+    return 0;
+  }
   return numbers.reduce((a: number, b: number): number => a + b);
 };
 
