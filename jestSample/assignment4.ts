@@ -1,4 +1,4 @@
-import { ApiBeerFetcher } from "./api/apiBeerFetcher";
+import { ApiBeerFetcher, IApiBeerFetcher } from "./api/apiBeerFetcher";
 
 
 /**
@@ -50,9 +50,9 @@ export function calculateAge(birthday: Date): number {
  * @returns {Promise<string>} フェッチしたビールデータの名前（'IPA'を含まない場合）または空の文字列（'IPA'を含む場合）。
  * @async
  */
-export const getBeerNameExceptIPA = async (
+export const getBeerNameExceptIPA = async (apiBeerFetcher: IApiBeerFetcher
 ): Promise<string> => {
-  const api = new ApiBeerFetcher();
+  const api = apiBeerFetcher;
   const beer = await api.fetch();
   if (beer.includes('IPA')) {
     return '';
