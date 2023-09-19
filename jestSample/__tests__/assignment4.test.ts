@@ -1,7 +1,6 @@
 import { IApiBeerFetcher } from "../api/apiBeerFetcher";
 import { calculateAge, getBeerNameExceptIPA, splitAndInvoke } from "../assignment4"
 import { MockApiBeerFetcher } from "../__mocks__/apiBeerFetcher";
-import { isExportDeclaration } from "typescript";
 
 describe('calculateAge', () => {
     // 現在日時を「2023年6月1️日」に設定する
@@ -49,18 +48,61 @@ describe("getBeerNameExceptIPA", () => {
 });
 
 describe("splitAndInvoke", () => {
-    const mockCallBack = jest.fn();
     const text: string = "Hello World";
     const delay: number = 100;
+    let mockCallBack: () => void;
     
-    test('textに"Hello World"が渡された場合、コールバック関数が2回呼ばれる', async () => {
-        await splitAndInvoke(text, mockCallBack, delay);
-        expect(mockCallBack).toHaveBeenCalledTimes(2);
+    describe('コールバック関数のテスト', () => {
+
+        beforeEach(() => {
+            mockCallBack = jest.fn();
+        });
+        
+        test('textに"Hello World"が渡された場合、コールバック関数が2回呼ばれる', async () => {
+            await splitAndInvoke(text, mockCallBack, delay);
+            expect(mockCallBack).toHaveBeenCalledTimes(2);
+        });
+        
+        test('textに"Hello World"が渡された場合、コールバック関数の引数は"Hello","World"', async () => {
+            await splitAndInvoke(text, mockCallBack, delay);
+            expect(mockCallBack).toHaveBeenCalledWith("Hello");
+            expect(mockCallBack).toHaveBeenCalledWith("World");
+        });
     });
     
-    test('textに"Hello World"が渡された場合、コールバック関数の引数は"Hello","World"', async () => {
-        await splitAndInvoke(text, mockCallBack, delay);
-        expect(mockCallBack).toHaveBeenCalledWith("Hello");
-        expect(mockCallBack).toHaveBeenCalledWith("World");
-    });
+    describe('delayのテスト', () => {
+    
+        beforeEach(() => {
+            jest.useFakeTimers();
+            mockCallBack = jest.fn();
+        })
+
+        afterEach(() => {
+            jest.useRealTimers();
+        })
+    
+        test('delayで渡されたミリ秒数たった後、コールバック関数が実行される', async () => {
+            splitAndInvoke(text, mockCallBack, delay);
+
+            jest.advanceTimersByTime(delay);
+            await Promise.resolve();
+            expect(mockCallBack).toHaveBeenCalledWith("Hello");
+            
+            jest.advanceTimersByTime(delay);
+            await Promise.resolve();
+            expect(mockCallBack).toHaveBeenCalledWith("World");
+        });
+
+        test('delayを渡さない場合、500ミリ秒間隔でコールバック関数が実行される', async () => {
+            splitAndInvoke(text, mockCallBack);
+
+            jest.advanceTimersByTime(500);
+            await Promise.resolve();
+            expect(mockCallBack).toHaveBeenCalledWith("Hello");
+            
+            jest.advanceTimersByTime(500);
+            await Promise.resolve();
+            expect(mockCallBack).toHaveBeenCalledWith("World");
+        });
+    })
 })
